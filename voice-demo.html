@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Voice Receptionist Demo — Isaac Automation Group</title>
+  <meta name="description" content="Try our live AI voice receptionist. Call now and hear Sarah answer, capture your info, and book appointments automatically.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── Instruction Popup ── -->
+<div class="overlay" id="intro-overlay" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+  <div class="modal">
+    <h2 id="popup-title">Before You Call</h2>
+    <p>When Sarah answers, introduce yourself naturally. Try saying:</p>
+    <div class="script-block">
+      "Hi, my name is [your name] and my address is 123 Demo Street."
+    </div>
+    <p style="margin-bottom: 24px;">Sarah will capture your name and address automatically — no human needed.</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="close-popup">Got it — let's call</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Header ── -->
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <svg class="logo-icon" width="48" height="30" viewBox="0 0 48 30" fill="none" aria-hidden="true">
+          <path d="M6 27 L16 11 L24 20 L32 8 L40 17 L48 13 L48 27 Z" fill="#d4d4d4"/>
+          <path d="M0 30 L12 10 L20 20 L28 4 L38 16 L48 9 L48 30 Z" fill="#8c8c8c"/>
+        </svg>
+        <span class="logo-text">Isaac Automation Group</span>
+      </a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/#contact" class="btn btn-primary">Book a Call</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- ── Page Hero ── -->
+<div class="demo-header">
+  <div class="container">
+    <a href="/" class="back-link">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Back to home
+    </a>
+    <h1>Try Our AI Voice Receptionist</h1>
+    <p class="subtitle">Call the number below and speak with Sarah — our AI receptionist who never sleeps.</p>
+  </div>
+</div>
+
+<!-- ── Phone Number ── -->
+<div class="phone-block">
+  <p class="phone-hint">Live AI Demo Line</p>
+  <a href="tel:+13865758647" class="phone-num">(386) 575-8647</a>
+  <span class="phone-caption">Tap to call our live AI demo</span>
+</div>
+
+<!-- ── Quote Cards ── -->
+<section class="quotes-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">What Sarah Does</span>
+      <h2>Always On. Never Misses a Call.</h2>
+    </div>
+    <div class="quote-grid">
+
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <blockquote>Never miss a call again — Sarah answers 24/7, even at 2am on a Sunday.</blockquote>
+        <div class="quote-meta">24/7 Coverage</div>
+      </div>
+
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <blockquote>Captures caller name and address automatically — no manual data entry required.</blockquote>
+        <div class="quote-meta">Auto Lead Capture</div>
+      </div>
+
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <blockquote>Books appointments without lifting a finger — your calendar fills itself while you focus on the work.</blockquote>
+        <div class="quote-meta">Automated Booking</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── Last Caller Info ── -->
+<section class="caller-section">
+  <div class="container">
+    <div class="section-header" style="text-align:center;">
+      <span class="label">Demo Data</span>
+      <h2>Last Caller Information</h2>
+      <p>This box shows information captured from the most recent call to the demo line.</p>
+    </div>
+    <div class="caller-card">
+      <div class="caller-card-header">
+        <h3>Caller Details</h3>
+        <span class="live-badge">
+          <span class="live-dot"></span>
+          Live capture
+        </span>
+      </div>
+      <div class="caller-body">
+        <div class="caller-row">
+          <span class="caller-label">Name</span>
+          <span class="caller-value">John Smith</span>
+        </div>
+        <div class="caller-row">
+          <span class="caller-label">Address</span>
+          <span class="caller-value">456 Oak Avenue</span>
+        </div>
+      </div>
+      <div class="caller-note">
+        Last caller info updates after each real call to the demo line.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact CTA ── -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Want This for Your Business?</h2>
+    <p>We'll set up your custom AI receptionist in days, not months. Book a free call to see how.</p>
+    <a href="https://calendly.com/isaacautomationgroup" target="_blank" rel="noopener" class="btn btn-primary">Book a Free Discovery Call</a>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-copy">© 2025 Isaac Automation Group. Daytona Beach, FL.</span>
+      <div class="footer-links">
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="refund.html">Refund</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('close-popup').addEventListener('click', function () {
+    document.getElementById('intro-overlay').classList.add('hidden');
+  });
+
+  // Also allow closing by clicking the overlay background
+  document.getElementById('intro-overlay').addEventListener('click', function (e) {
+    if (e.target === this) {
+      this.classList.add('hidden');
+    }
+  });
+</script>
+
+</body>
+</html>

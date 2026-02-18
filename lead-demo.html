@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lead Generation Bot Demo — Isaac Automation Group</title>
+  <meta name="description" content="Try our AI lead generation bot. It qualifies prospects by asking the right questions and summarizes their needs — all automatically.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── API Key Modal ── -->
+<div class="overlay hidden" id="key-overlay" role="dialog" aria-modal="true" aria-labelledby="key-title">
+  <div class="modal">
+    <h2 id="key-title">Configure API Key</h2>
+    <p>Enter your Anthropic API key to enable live AI responses. Your key is stored locally in your browser and never sent to our servers.</p>
+    <input type="password" id="api-key-input" placeholder="sk-ant-..." autocomplete="off" spellcheck="false">
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="save-key-btn">Save Key</button>
+      <button class="btn btn-secondary" id="cancel-key-btn">Use Demo Mode</button>
+    </div>
+    <p class="modal-note">No API key? The bot will run in demo mode with a scripted flow that shows exactly how lead qualification works.</p>
+  </div>
+</div>
+
+<!-- ── Header ── -->
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <svg class="logo-icon" width="48" height="30" viewBox="0 0 48 30" fill="none" aria-hidden="true">
+          <path d="M6 27 L16 11 L24 20 L32 8 L40 17 L48 13 L48 27 Z" fill="#d4d4d4"/>
+          <path d="M0 30 L12 10 L20 20 L28 4 L38 16 L48 9 L48 30 Z" fill="#8c8c8c"/>
+        </svg>
+        <span class="logo-text">Isaac Automation Group</span>
+      </a>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/#contact" class="btn btn-primary">Book a Call</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- ── Page Hero ── -->
+<div class="demo-header">
+  <div class="container">
+    <a href="/" class="back-link">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Back to home
+    </a>
+    <h1>Try Our Lead Generation Bot</h1>
+    <p class="subtitle">The bot will ask you a few questions to understand your business and qualify you as a lead — just like it would for your own customers.</p>
+  </div>
+</div>
+
+<!-- ── Chat Interface ── -->
+<section class="chat-section">
+  <div class="container">
+    <div class="chat-wrapper">
+      <div class="chat-box">
+
+        <!-- Chat header -->
+        <div class="chat-top">
+          <div class="chat-agent">
+            <div class="chat-avatar" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                <path d="M16 3.13a4 4 0 010 7.75"/>
+              </svg>
+            </div>
+            <div>
+              <div class="chat-agent-name">Lead Qualifier</div>
+              <div class="chat-agent-status" id="status-text">Online · Demo Mode</div>
+            </div>
+          </div>
+          <button class="chat-key-btn" id="open-key-btn" title="Configure API Key">⚙ API Key</button>
+        </div>
+
+        <!-- Messages -->
+        <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-label="Chat messages">
+          <!-- Initial bot message added by JS -->
+        </div>
+
+        <!-- Input -->
+        <div class="chat-bottom">
+          <textarea
+            class="chat-input"
+            id="chat-input"
+            placeholder="Type your answer…"
+            rows="1"
+            aria-label="Type your answer"
+          ></textarea>
+          <button class="send-btn" id="send-btn" aria-label="Send message">
+            Send
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact CTA ── -->
+<section class="cta-section">
+  <div class="container">
+    <h2>Want This Qualifying Your Leads?</h2>
+    <p>We build and deploy custom lead bots that pre-qualify prospects 24/7 and send you a summary of every conversation.</p>
+    <a href="https://calendly.com/isaacautomationgroup" target="_blank" rel="noopener" class="btn btn-primary">Book a Free Discovery Call</a>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-copy">© 2025 Isaac Automation Group. Daytona Beach, FL.</span>
+      <div class="footer-links">
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="refund.html">Refund</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Config ──
+const STORAGE_KEY = 'iag_anthropic_key';
+const MODEL = 'claude-sonnet-4-6';
+const API_URL = 'https://api.anthropic.com/v1/messages';
+const SYSTEM_PROMPT = `You are a lead qualification bot demo. Ask the user for their business name, what type of service they offer, how many calls they miss per week, and whether they currently have any automation systems. After collecting this info, summarize it and tell them Isaac Automation Group can help.`;
+
+// ── Demo Mode: Scripted Flow ──
+const DEMO_STEPS = [
+  {
+    question: "Hi there! I'm the lead qualification assistant for Isaac Automation Group.\n\nI'd love to learn about your business so we can see how AI can help you grow. Let's start simple — what's your business name?",
+    field: 'businessName',
+  },
+  {
+    question: (data) => `Nice to meet you, ${data.businessName}! What type of service does ${data.businessName} offer? For example: HVAC, dog training, landscaping, medical, transportation, etc.`,
+    field: 'serviceType',
+  },
+  {
+    question: "Got it! Here's a big one — roughly how many calls or inquiries do you miss per week? Even a ballpark is fine.",
+    field: 'missedCalls',
+  },
+  {
+    question: "Last question: do you currently have any automation systems in place? Things like scheduling software, a CRM, chatbots, or automated follow-up messages?",
+    field: 'currentAutomation',
+  },
+  {
+    // Summary step — dynamically generated
+    question: null,
+    field: 'done',
+  },
+];
+
+function buildSummary(data) {
+  return `Thanks for sharing all that! Here's what I've got:\n\n• Business: ${data.businessName}\n• Service: ${data.serviceType}\n• Missed calls/week: ${data.missedCalls}\n• Current automation: ${data.currentAutomation}\n\nBased on this, Isaac Automation Group can almost certainly help. A business like yours — missing ${data.missedCalls} inquiries a week — is leaving real money on the table.\n\nWe'd set you up with an AI system that captures every lead, qualifies them automatically, and sends you a clean summary. No more missed calls.\n\nBook a free 30-minute discovery call at the link below. We'll show you exactly what it would look like for ${data.businessName}. 👇`;
+}
+
+// ── State ──
+let conversationHistory = [];
+let isLoading = false;
+let demoStep = 0;
+let demoData = {};
+let useAPI = false;
+
+// ── DOM ──
+const messagesEl = document.getElementById('chat-messages');
+const inputEl = document.getElementById('chat-input');
+const sendBtn = document.getElementById('send-btn');
+const statusEl = document.getElementById('status-text');
+const openKeyBtn = document.getElementById('open-key-btn');
+const keyOverlay = document.getElementById('key-overlay');
+const apiKeyInput = document.getElementById('api-key-input');
+const saveKeyBtn = document.getElementById('save-key-btn');
+const cancelKeyBtn = document.getElementById('cancel-key-btn');
+
+// ── Key Management ──
+function getKey() { return localStorage.getItem(STORAGE_KEY) || ''; }
+function setKey(k) { localStorage.setItem(STORAGE_KEY, k); }
+
+function updateStatus() {
+  const key = getKey();
+  statusEl.textContent = key ? 'Online · Live AI' : 'Online · Demo Mode';
+  useAPI = !!key;
+}
+updateStatus();
+
+openKeyBtn.addEventListener('click', () => {
+  apiKeyInput.value = getKey();
+  keyOverlay.classList.remove('hidden');
+  apiKeyInput.focus();
+});
+saveKeyBtn.addEventListener('click', () => {
+  const val = apiKeyInput.value.trim();
+  if (val) { setKey(val); updateStatus(); }
+  keyOverlay.classList.add('hidden');
+});
+cancelKeyBtn.addEventListener('click', () => keyOverlay.classList.add('hidden'));
+keyOverlay.addEventListener('click', (e) => { if (e.target === keyOverlay) keyOverlay.classList.add('hidden'); });
+apiKeyInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') saveKeyBtn.click(); });
+
+// ── UI Helpers ──
+function addMessage(role, text) {
+  const wrap = document.createElement('div');
+  wrap.className = `msg ${role}`;
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.textContent = text;
+  wrap.appendChild(bubble);
+  messagesEl.appendChild(wrap);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return wrap;
+}
+
+function showTyping() {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg bot';
+  wrap.id = 'typing';
+  const dots = document.createElement('div');
+  dots.className = 'typing-dots';
+  dots.innerHTML = '<span></span><span></span><span></span>';
+  wrap.appendChild(dots);
+  messagesEl.appendChild(wrap);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing');
+  if (t) t.remove();
+}
+
+function setLoading(v) {
+  isLoading = v;
+  sendBtn.disabled = v;
+  inputEl.disabled = v;
+}
+
+// ── Demo Mode Handler ──
+async function demoBotReply(userInput) {
+  const step = DEMO_STEPS[demoStep - 1];
+
+  // Store user's answer
+  if (step && step.field && step.field !== 'done') {
+    demoData[step.field] = userInput;
+  }
+
+  await new Promise(r => setTimeout(r, 800 + Math.random() * 500));
+
+  if (demoStep >= DEMO_STEPS.length) {
+    return buildSummary(demoData);
+  }
+
+  const nextStep = DEMO_STEPS[demoStep];
+  demoStep++;
+
+  if (nextStep.field === 'done') {
+    return buildSummary(demoData);
+  }
+
+  return typeof nextStep.question === 'function'
+    ? nextStep.question(demoData)
+    : nextStep.question;
+}
+
+// ── API Mode Handler ──
+async function apiReply(userInput) {
+  conversationHistory.push({ role: 'user', content: userInput });
+  const key = getKey();
+
+  const resp = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-allow-browser': 'true',
+    },
+    body: JSON.stringify({
+      model: MODEL,
+      max_tokens: 600,
+      system: SYSTEM_PROMPT,
+      messages: conversationHistory,
+    }),
+  });
+
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error?.message || `API error ${resp.status}`);
+  }
+
+  const data = await resp.json();
+  const reply = data.content[0].text;
+  conversationHistory.push({ role: 'assistant', content: reply });
+  return reply;
+}
+
+// ── Send Handler ──
+async function handleSend() {
+  const text = inputEl.value.trim();
+  if (!text || isLoading) return;
+
+  inputEl.value = '';
+  inputEl.style.height = 'auto';
+  addMessage('user', text);
+  setLoading(true);
+  showTyping();
+
+  try {
+    let reply;
+    if (useAPI) {
+      try {
+        reply = await apiReply(text);
+      } catch (e) {
+        console.warn('API failed, falling back to demo mode:', e);
+        useAPI = false;
+        updateStatus();
+        reply = await demoBotReply(text);
+      }
+    } else {
+      reply = await demoBotReply(text);
+    }
+    removeTyping();
+    addMessage('bot', reply);
+  } catch (err) {
+    removeTyping();
+    addMessage('bot', 'Something went wrong. Please try again.');
+    console.error(err);
+  } finally {
+    setLoading(false);
+    inputEl.focus();
+  }
+}
+
+sendBtn.addEventListener('click', handleSend);
+inputEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    handleSend();
+  }
+});
+inputEl.addEventListener('input', function () {
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+});
+
+// ── Init: Show opening bot message ──
+(async function init() {
+  await new Promise(r => setTimeout(r, 300));
+  const firstStep = DEMO_STEPS[0];
+  const openingMsg = typeof firstStep.question === 'function'
+    ? firstStep.question(demoData)
+    : firstStep.question;
+  demoStep = 1;
+
+  if (useAPI) {
+    // For API mode, seed conversation with the opening message
+    conversationHistory.push({ role: 'assistant', content: openingMsg });
+  }
+
+  addMessage('bot', openingMsg);
+})();
+</script>
+
+</body>
+</html>
