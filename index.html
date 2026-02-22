@@ -1,3 +1,5 @@
+<!-- REMINDER: Verify "Enforce HTTPS" is checked in GitHub Pages settings:
+     GitHub repo → Settings → Pages → Enforce HTTPS (checkbox). -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,22 +7,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Isaac Automation Group — AI Systems for Small Businesses</title>
   <meta name="description" content="Isaac Automation Group builds AI voice receptionists, chatbots, and lead generation systems for small businesses. Always on. Never misses a call.">
+  <link rel="canonical" href="https://isaacautomation.com" />
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<!-- ── Splash Screen ── -->
+<div id="splash" aria-hidden="true">
+  <span class="splash-name">Isaac Automation Group</span>
+</div>
 
 <!-- ── Header ── -->
 <header>
   <div class="container">
     <div class="header-inner">
       <a href="/" class="logo">
-        <svg class="logo-icon" width="48" height="30" viewBox="0 0 48 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- Back mountain range -->
-          <path d="M6 27 L16 11 L24 20 L32 8 L40 17 L48 13 L48 27 Z" fill="#d4d4d4"/>
-          <!-- Front mountain range -->
-          <path d="M0 30 L12 10 L20 20 L28 4 L38 16 L48 9 L48 30 Z" fill="#8c8c8c"/>
+        <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect width="32" height="32" rx="8" fill="#111111"/>
+          <path d="M8 24L16 9 24 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M11 19h10" stroke="white" stroke-width="2" stroke-linecap="round"/>
         </svg>
-        <span class="logo-text">Isaac Automation Group</span>
+        <span class="logo-text">
+          <span class="logo-name-main">Isaac</span>
+          <span class="logo-name-sub">Automation Group</span>
+        </span>
       </a>
       <nav>
         <a href="#demos">Demos</a>
@@ -37,6 +47,7 @@
     <span class="eyebrow">AI Automation for Small Businesses</span>
     <h1>AI Systems That Work<br>While You Sleep</h1>
     <p class="hero-sub">We build voice receptionists, chatbots, and lead generation systems for small businesses — fully automated and always on.</p>
+    <p class="hero-focus">Built for solo operators and small service businesses.</p>
     <div class="hero-actions">
       <a href="#demos" class="btn btn-primary">See Live Demos</a>
       <a href="#contact" class="btn btn-secondary">Book a Free Call</a>
@@ -183,6 +194,64 @@
   </div>
 </section>
 
+<!-- ── Instagram DM Automation ── -->
+<!-- Calendly link: https://calendly.com/isaacautomationgroup — update here if it changes -->
+<section id="instagram" class="instagram-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Instagram Automation</span>
+      <h2>Never Miss Another Instagram Lead</h2>
+      <p>For photographers, lash technicians, estheticians, personal trainers, and every solo operator who loses business because they can't stop working to check their phone.</p>
+    </div>
+    <div class="ig-intro">
+      <p class="ig-lead">When someone messages you on Instagram, they want a response now — not when you're done with your client, not tonight, not tomorrow. Our system handles it the moment they reach out, so every lead gets a reply whether you're in the middle of a session or asleep.</p>
+    </div>
+    <div class="ig-feature-grid">
+
+      <div class="ig-feature">
+        <div class="ig-feature-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </div>
+        <h3>Instant Reply, Every Time</h3>
+        <p>The moment someone slides into your DMs, they get a response. No waiting. No missed conversations. Your business looks professional around the clock.</p>
+      </div>
+
+      <div class="ig-feature">
+        <div class="ig-feature-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+            <path d="M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+        </div>
+        <h3>Collects Their Info Automatically</h3>
+        <p>The system asks for their name and contact details so you always know who reached out — no more digging through DMs trying to piece together a lead's information.</p>
+      </div>
+
+      <div class="ig-feature">
+        <div class="ig-feature-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <h3>Sends Booking Info on the Spot</h3>
+        <p>When someone's ready to book, it asks what service they're interested in and sends your booking details automatically. More conversations end in a booking instead of going cold.</p>
+      </div>
+
+    </div>
+    <div class="ig-cta">
+      <p class="ig-cta-text">You keep doing the work. Your leads get handled.</p>
+      <a href="https://calendly.com/isaacautomationgroup" target="_blank" rel="noopener" class="btn btn-primary">Book a Free Call</a>
+    </div>
+  </div>
+</section>
+
 <!-- ── Contact CTA ── -->
 <section id="contact" class="cta-section">
   <div class="container">
@@ -205,6 +274,16 @@
     </div>
   </div>
 </footer>
+
+
+<script>
+  // Splash screen — removes itself from the DOM after the CSS fade-out completes (2.5s total)
+  (function () {
+    var splash = document.getElementById('splash');
+    if (!splash) return;
+    setTimeout(function () { splash.remove(); }, 2500);
+  })();
+</script>
 
 </body>
 </html>
