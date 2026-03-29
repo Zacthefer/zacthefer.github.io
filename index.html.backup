@@ -1,0 +1,257 @@
+<!-- REMINDER: Verify "Enforce HTTPS" is checked in GitHub Pages settings:
+     GitHub repo → Settings → Pages → Enforce HTTPS (checkbox). -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Isaac Automation Group — AI Systems for Small Businesses</title>
+  <meta name="description" content="Isaac Automation Group builds AI voice receptionists, chatbots, and lead generation systems for small businesses. Always on. Never misses a call.">
+  <link rel="canonical" href="https://isaacautomation.com" />
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .hero-title-3d {
+      font-size: clamp(2.8rem, 7vw, 6.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      text-align: center;
+      background: linear-gradient(
+        135deg,
+        #1a1916 0%,
+        #4a4844 18%,
+        #2a2927 32%,
+        #c8a96e 43%,
+        #f5e6c0 51%,
+        #c8a96e 58%,
+        #3a3835 70%,
+        #1a1916 85%,
+        #5a5855 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0px 2px 6px rgba(0,0,0,0.18)) drop-shadow(0px 8px 28px rgba(200,169,110,0.15));
+      margin-bottom: 1.5rem;
+    }
+
+    .mission-section {
+      padding: 8rem 2rem;
+      background: #111110;
+      text-align: center;
+    }
+
+    .mission-inner {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .mission-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: #c8a96e;
+      margin-bottom: 1.5rem;
+    }
+
+    .mission-headline {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: #ffffff;
+      margin-bottom: 2rem;
+    }
+
+    .mission-divider {
+      width: 48px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #c8a96e, transparent);
+      margin: 0 auto 2.5rem;
+    }
+
+    .mission-body {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: rgba(255, 255, 255, 0.52);
+      margin-bottom: 1.2rem;
+    }
+
+    .mission-close {
+      color: rgba(255, 255, 255, 0.85);
+      font-style: italic;
+      margin-top: 2rem;
+      font-size: 1.05rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Splash Screen ── -->
+<div id="splash" aria-hidden="true">
+  <div class="splash-logo">
+    <span class="splash-name-main">Isaac</span>
+    <span class="splash-name-sub">Automation Group</span>
+  </div>
+</div>
+
+<!-- ── Header ── -->
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <span class="logo-text">
+          <span class="logo-name-main">Isaac</span>
+          <span class="logo-name-sub">Automation Group</span>
+        </span>
+      </a>
+      <nav>
+        <a href="#demos">Demos</a>
+        <a href="#mission">Our Mission</a>
+        <a href="#contact" class="btn btn-primary">Book a Call</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- ── Hero ── -->
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow">AI Automation for Small Businesses</span>
+    <h1 class="hero-title-3d">Isaac Automation Group</h1>
+    <div class="hero-actions">
+      <a href="#demos" class="btn btn-primary">See Live Demos</a>
+      <a href="#contact" class="btn btn-secondary">Book a Free Call</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Demo Cards ── -->
+<section id="demos" class="demos-section">
+  <div class="container">
+    <div class="section-header">
+      <span class="label">Live Demos</span>
+      <h2>Try It Yourself</h2>
+      <p>Click any card to interact with a live demo — no sign-up needed.</p>
+    </div>
+    <div class="demo-grid">
+
+      <!-- Voice Receptionist -->
+      <a href="voice-demo.html" class="demo-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.37 9.5 19.79 19.79 0 01.3 2.87 2 2 0 012.18 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.5v2.42z"/>
+          </svg>
+        </div>
+        <h3>AI Voice Receptionist</h3>
+        <p>A 24/7 AI receptionist that answers calls, captures lead info, and books appointments — no humans required.</p>
+        <div class="card-footer">
+          <span class="card-cta">Try the demo</span>
+          <div class="card-arrow">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- AI Chatbot -->
+      <a href="chat-demo.html" class="demo-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          </svg>
+        </div>
+        <h3>AI Chatbot</h3>
+        <p>A smart chatbot that answers FAQs, qualifies leads, and handles customer questions instantly on your site.</p>
+        <div class="card-footer">
+          <span class="card-cta">Try the demo</span>
+          <div class="card-arrow">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </a>
+
+      <!-- Lead Generation -->
+      <a href="lead-demo.html" class="demo-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+            <path d="M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+        </div>
+        <h3>Lead Generation Bot</h3>
+        <p>Qualify and capture leads around the clock with a conversational bot that asks the right questions and segments prospects.</p>
+        <div class="card-footer">
+          <span class="card-cta">Try the demo</span>
+          <div class="card-arrow">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="mission-section" id="mission">
+  <div class="mission-inner">
+    <p class="mission-label">Our Mission</p>
+    <h2 class="mission-headline">We don't just sell automations.<br>We sell growth.</h2>
+    <div class="mission-divider"></div>
+    <p class="mission-body">
+      Every business owner we work with has something in common — they're good
+      at what they do, and they're tired of the gaps between what their business
+      is and what it could be.
+    </p>
+    <p class="mission-body">
+      We started Isaac Automation Group because we genuinely believe small
+      businesses deserve the same tools that big companies have been using for
+      years. Not because it's a good market. Because it changes people's lives.
+    </p>
+    <p class="mission-body">
+      When a client tells us they finally stopped worrying about missed calls,
+      or that they woke up to three new bookings — that's the job.
+      That's what we're here for.
+    </p>
+    <p class="mission-body mission-close">
+      Growth isn't a feature we sell. It's the only thing we're building toward.
+    </p>
+  </div>
+</section>
+
+<!-- ── Contact CTA ── -->
+<section id="contact" class="cta-section">
+  <div class="container">
+    <h2>Ready to Automate Your Business?</h2>
+    <p>Book a free 30-minute discovery call. We'll show you exactly how AI can save you time and capture more leads.</p>
+    <a href="https://calendly.com/isaacautomationgroup-isaacautomation/new-meeting" target="_blank" rel="noopener" class="btn btn-primary">Book a Free Discovery Call</a>
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-copy">© 2025 Isaac Automation Group. Daytona Beach, FL.</span>
+      <div class="footer-links">
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="refund.html">Refund</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // Splash screen — removes itself from the DOM after the CSS fade-out completes (2.5s total)
+  (function () {
+    var splash = document.getElementById('splash');
+    if (!splash) return;
+    setTimeout(function () { splash.remove(); }, 2500);
+  })();
+</script>
+
+</body>
+</html>
