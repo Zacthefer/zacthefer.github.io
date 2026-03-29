@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Growth Assessment — Isaac Automation Group</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #F8F7F4; --surface: #FFFFFF; --border: #E4E1D8; --border-strong: #C8C4B8;
+    --text-primary: #1A1917; --text-secondary: #6B6860; --text-hint: #A09D96;
+    --accent-light: #F0EDE6; --progress-fill: #1A1917;
+    --tag-bg: #EEEAE2; --tag-text: #4A4844; --error: #C0392B;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; }
+  header { padding: 1.25rem 2rem; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .logo { font-family: 'DM Serif Display', serif; font-size: 1.05rem; letter-spacing: 0.01em; flex-shrink: 0; }
+  .logo span { font-style: italic; color: var(--text-secondary); }
+  .header-right { display: flex; align-items: center; gap: 1.25rem; }
+  .step-counter { font-size: 0.78rem; color: var(--text-hint); letter-spacing: 0.05em; font-weight: 500; white-space: nowrap; }
+  .lang-switcher { display: flex; gap: 0.25rem; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 3px; }
+  .lang-btn { font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; padding: 0.3rem 0.55rem; border: none; background: none; border-radius: 5px; cursor: pointer; color: var(--text-hint); transition: all 0.15s; white-space: nowrap; }
+  .lang-btn.active { background: var(--surface); color: var(--text-primary); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .lang-btn:hover:not(.active) { color: var(--text-secondary); }
+  .progress-bar { height: 2px; background: var(--border); }
+  .progress-fill { height: 100%; background: var(--progress-fill); transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
+  main { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 3rem 1.5rem; }
+  .survey-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 3rem; max-width: 620px; width: 100%; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .step { display: none; }
+  .step.active { display: block; }
+  .step-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-hint); margin-bottom: 0.75rem; }
+  h2 { font-family: 'DM Serif Display', serif; font-size: 1.7rem; line-height: 1.25; margin-bottom: 0.5rem; }
+  .subtitle { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.6; }
+  .field { margin-bottom: 1.4rem; }
+  label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--text-primary); margin-bottom: 0.4rem; }
+  label .req { color: var(--error); margin-left: 2px; }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="url"], select, textarea {
+    width: 100%; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; color: var(--text-primary);
+    background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.65rem 0.9rem; outline: none; transition: border-color 0.2s; -webkit-appearance: none; appearance: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--text-primary); background: #fff; }
+  input::placeholder, textarea::placeholder { color: var(--text-hint); }
+  textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B6860' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.8rem center; padding-right: 2.2rem; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 0.2rem; }
+  .check-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 0.8rem; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; background: var(--bg); user-select: none; }
+  .check-item:hover { border-color: var(--border-strong); background: #fff; }
+  .check-item.selected { border-color: var(--text-primary); background: var(--accent-light); }
+  .check-item input[type="checkbox"] { width: 15px; height: 15px; flex-shrink: 0; accent-color: var(--text-primary); cursor: pointer; }
+  .check-item span { font-size: 0.82rem; font-weight: 400; line-height: 1.3; }
+  .radio-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .radio-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.15s; background: var(--bg); }
+  .radio-item:hover { border-color: var(--border-strong); background: #fff; }
+  .radio-item.selected { border-color: var(--text-primary); background: var(--accent-light); }
+  .radio-item input[type="radio"] { width: 16px; height: 16px; accent-color: var(--text-primary); cursor: pointer; flex-shrink: 0; }
+  .radio-item .radio-label { font-size: 0.88rem; font-weight: 400; }
+  .radio-item .radio-sub { font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px; }
+  .scale-row { display: flex; gap: 0.4rem; margin-top: 0.4rem; }
+  .scale-btn { flex: 1; padding: 0.55rem 0; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.15s; color: var(--text-secondary); }
+  .scale-btn:hover { border-color: var(--border-strong); color: var(--text-primary); background: #fff; }
+  .scale-btn.selected { border-color: var(--text-primary); background: var(--text-primary); color: #fff; }
+  .scale-labels { display: flex; justify-content: space-between; margin-top: 0.4rem; }
+  .scale-labels span { font-size: 0.72rem; color: var(--text-hint); }
+  .error-msg { font-size: 0.78rem; color: var(--error); margin-top: 0.35rem; display: none; }
+  .field.has-error input, .field.has-error select, .field.has-error textarea { border-color: var(--error); }
+  .field.has-error .error-msg { display: block; }
+  .nav-row { display: flex; align-items: center; justify-content: space-between; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .btn-back { font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); background: none; border: none; cursor: pointer; padding: 0.6rem 0; transition: color 0.15s; }
+  .btn-back:hover { color: var(--text-primary); }
+  .btn-next, .btn-submit { font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 500; color: #fff; background: var(--text-primary); border: none; border-radius: 8px; padding: 0.7rem 1.6rem; cursor: pointer; transition: opacity 0.15s; }
+  .btn-next:hover, .btn-submit:hover { opacity: 0.85; }
+  .consent-row { display: flex; align-items: flex-start; gap: 0.65rem; padding: 1rem; background: var(--accent-light); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 1rem; }
+  .consent-row input[type="checkbox"] { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; accent-color: var(--text-primary); cursor: pointer; }
+  .consent-row p { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.6; }
+  .ty-icon { width: 52px; height: 52px; background: var(--text-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
+  .ty-icon svg { width: 22px; height: 22px; }
+  .pain-summary { background: var(--accent-light); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+  .pain-summary h4 { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-hint); margin-bottom: 0.8rem; }
+  .pain-tag { display: inline-block; background: var(--tag-bg); color: var(--tag-text); font-size: 0.78rem; font-weight: 500; padding: 0.3rem 0.7rem; border-radius: 20px; margin: 0.2rem 0.2rem 0.2rem 0; }
+  .pain-note { font-size: 0.83rem; color: var(--text-secondary); margin-top: 0.8rem; line-height: 1.6; font-style: italic; }
+  .next-steps { font-size: 0.85rem; color: var(--text-secondary); background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; }
+  .next-steps p { margin-bottom: 0.5rem; }
+  .next-steps p:last-child { margin-bottom: 0; }
+  .next-steps strong { color: var(--text-primary); font-weight: 500; }
+  footer { text-align: center; padding: 1.5rem; font-size: 0.75rem; color: var(--text-hint); border-top: 1px solid var(--border); }
+  footer a { color: var(--text-secondary); text-decoration: none; }
+  footer a:hover { color: var(--text-primary); }
+  @media (max-width: 580px) {
+    .survey-card { padding: 2rem 1.5rem; border-radius: 12px; }
+    .field-row, .checkbox-grid { grid-template-columns: 1fr; }
+    h2 { font-size: 1.4rem; }
+    main { padding: 1.5rem 1rem; }
+    header { padding: 1rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Isaac Automation <span>Group</span></div>
+  <div class="header-right">
+    <div class="step-counter" id="step-counter"></div>
+    <div class="lang-switcher">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('es')">ES</button>
+      <button class="lang-btn" onclick="setLang('ht')">HT</button>
+    </div>
+  </div>
+</header>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:20%"></div></div>
+
+<main>
+<div class="survey-card" id="survey-wrap">
+
+  <!-- STEP 1 -->
+  <div class="step active" id="step-1">
+    <div class="step-label" data-t="s1label"></div>
+    <h2 data-t="s1h2"></h2>
+    <p class="subtitle" data-t="s1sub"></p>
+    <div class="field-row">
+      <div class="field" id="f-first">
+        <label data-t="firstName"><span class="req">*</span></label>
+        <input type="text" id="first-name" />
+        <div class="error-msg" data-t="errFirst"></div>
+      </div>
+      <div class="field" id="f-last">
+        <label data-t="lastName"><span class="req">*</span></label>
+        <input type="text" id="last-name" />
+        <div class="error-msg" data-t="errLast"></div>
+      </div>
+    </div>
+    <div class="field" id="f-email">
+      <label data-t="emailLabel"><span class="req">*</span></label>
+      <input type="email" id="email" />
+      <div class="error-msg" data-t="errEmail"></div>
+    </div>
+    <div class="field" id="f-phone">
+      <label data-t="phoneLabel"><span class="req">*</span></label>
+      <input type="tel" id="phone" placeholder="(555) 000-0000" />
+      <div class="error-msg" data-t="errPhone"></div>
+    </div>
+    <div class="field">
+      <label data-t="referredBy"></label>
+      <select id="referred-by" data-opts="refOpts"></select>
+    </div>
+    <div class="nav-row">
+      <span></span>
+      <button class="btn-next" onclick="nextStep(1)" data-t="btnContinue"></button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step" id="step-2">
+    <div class="step-label" data-t="s2label"></div>
+    <h2 data-t="s2h2"></h2>
+    <p class="subtitle" data-t="s2sub"></p>
+    <div class="field" id="f-biz-name">
+      <label data-t="bizName"><span class="req">*</span></label>
+      <input type="text" id="biz-name" data-ph="bizNamePh" />
+      <div class="error-msg" data-t="errBizName"></div>
+    </div>
+    <div class="field-row">
+      <div class="field" id="f-industry">
+        <label data-t="industryLabel"><span class="req">*</span></label>
+        <select id="industry" data-opts="indOpts"></select>
+        <div class="error-msg" data-t="errIndustry"></div>
+      </div>
+      <div class="field" id="f-team-size">
+        <label data-t="teamLabel"><span class="req">*</span></label>
+        <select id="team-size" data-opts="teamOpts"></select>
+        <div class="error-msg" data-t="errTeam"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label data-t="revenueLabel"></label>
+      <select id="revenue" data-opts="revOpts"></select>
+    </div>
+    <div class="field">
+      <label data-t="websiteLabel"></label>
+      <input type="url" id="website" placeholder="https://yourbusiness.com" />
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="prevStep(2)" data-t="btnBack"></button>
+      <button class="btn-next" onclick="nextStep(2)" data-t="btnContinue"></button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step" id="step-3">
+    <div class="step-label" data-t="s3label"></div>
+    <h2 data-t="s3h2"></h2>
+    <p class="subtitle" data-t="s3sub"></p>
+    <div class="field" id="f-pain">
+      <label data-t="painLabel"></label>
+      <div class="checkbox-grid" id="pain-grid"></div>
+      <div class="error-msg" id="pain-error" data-t="errPain"></div>
+    </div>
+    <div class="field">
+      <label data-t="painDetailLabel"></label>
+      <textarea id="pain-detail" data-ph="painDetailPh"></textarea>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="prevStep(3)" data-t="btnBack"></button>
+      <button class="btn-next" onclick="nextStep(3)" data-t="btnContinue"></button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step" id="step-4">
+    <div class="step-label" data-t="s4label"></div>
+    <h2 data-t="s4h2"></h2>
+    <p class="subtitle" data-t="s4sub"></p>
+    <div class="field">
+      <label data-t="investLabel"></label>
+      <div class="radio-group" id="invest-group"></div>
+    </div>
+    <div class="field">
+      <label data-t="urgencyLabel"></label>
+      <div class="scale-row" id="urgency-scale">
+        <button class="scale-btn" onclick="selectScale(this,'urgency-scale')" data-val="1">1</button>
+        <button class="scale-btn" onclick="selectScale(this,'urgency-scale')" data-val="2">2</button>
+        <button class="scale-btn" onclick="selectScale(this,'urgency-scale')" data-val="3">3</button>
+        <button class="scale-btn" onclick="selectScale(this,'urgency-scale')" data-val="4">4</button>
+        <button class="scale-btn" onclick="selectScale(this,'urgency-scale')" data-val="5">5</button>
+        <button class="scale-btn" onclick="selectScale(this,'urgency-scale')" data-val="6">6</button>
+        <button class="scale-btn" onclick="selectScale(this,'urgency-scale')" data-val="7">7</button>
+        <button class="scale-btn" onclick="selectScale(this,'urgency-scale')" data-val="8">8</button>
+        <button class="scale-btn" onclick="selectScale(this,'urgency-scale')" data-val="9">9</button>
+        <button class="scale-btn" onclick="selectScale(this,'urgency-scale')" data-val="10">10</button>
+      </div>
+      <div class="scale-labels"><span data-t="scaleMin"></span><span data-t="scaleMax"></span></div>
+    </div>
+    <div class="field">
+      <label data-t="toolsLabel"></label>
+      <select id="current-tools" data-opts="toolsOpts"></select>
+    </div>
+    <div class="field">
+      <label data-t="extraLabel"></label>
+      <textarea id="extra-notes" data-ph="extraPh"></textarea>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="prevStep(4)" data-t="btnBack"></button>
+      <button class="btn-next" onclick="nextStep(4)" data-t="btnContinue"></button>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step" id="step-5">
+    <div class="step-label" data-t="s5label"></div>
+    <h2 data-t="s5h2"></h2>
+    <p class="subtitle" data-t="s5sub"></p>
+    <div class="consent-row">
+      <input type="checkbox" id="consent-check" />
+      <p data-t="consent1"></p>
+    </div>
+    <div class="consent-row">
+      <input type="checkbox" id="email-list-check" checked />
+      <p data-t="consent2"></p>
+    </div>
+    <div class="error-msg" id="consent-error" style="display:none" data-t="errConsent"></div>
+    <div class="nav-row">
+      <button class="btn-back" onclick="prevStep(5)" data-t="btnBack"></button>
+      <button class="btn-submit" onclick="submitForm()" data-t="btnSubmit"></button>
+    </div>
+  </div>
+
+</div>
+
+<!-- THANK YOU -->
+<div class="survey-card" id="thank-you" style="display:none">
+  <div class="ty-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+  </div>
+  <h2 data-t="tyH2"></h2>
+  <p class="subtitle" data-t="tySub"></p>
+  <div class="pain-summary" id="pain-summary-block">
+    <h4 data-t="tySnapshotLabel"></h4>
+    <div id="pain-tags"></div>
+    <div class="pain-note" id="pain-note-block"></div>
+  </div>
+  <div class="next-steps">
+    <p><strong data-t="tyNextLabel"></strong></p>
+    <p data-t="tyNextBody"></p>
+    <p style="margin-top:0.75rem"><a href="https://isaacautomation.com" style="color:var(--text-primary);font-weight:500" data-t="tyBack"></a></p>
+  </div>
+</div>
+</main>
+
+<footer>&copy; 2026 Isaac Automation Group &nbsp;·&nbsp; <a href="https://isaacautomation.com">isaacautomation.com</a> &nbsp;·&nbsp; <a href="mailto:isaacautomationgroup@isaacautomation.com" data-t="footerContact"></a></footer>
+
+<script>
+const T = {
+  en: {
+    stepFn: n => n === 'done' ? 'Complete' : 'Step ' + n + ' of 5',
+    s1label:'Getting started', s1h2:'Tell us about yourself', s1sub:'This takes about 3 minutes. Your answers help us understand how we can support your business.',
+    firstName:'First name', lastName:'Last name', emailLabel:'Email address', phoneLabel:'Phone number',
+    referredBy:'How did you hear about this survey?',
+    errFirst:'Please enter your first name.', errLast:'Please enter your last name.',
+    errEmail:'Please enter a valid email address.', errPhone:'Please enter your phone number.',
+    btnContinue:'Continue →', btnBack:'← Back',
+    s2label:'Your business', s2h2:'About your company', s2sub:'We work with all types of businesses. The more detail you share, the better we can tailor our conversation.',
+    bizName:'Business name', bizNamePh:'Acme Roofing Co.',
+    industryLabel:'Industry / Type', teamLabel:'Team size', revenueLabel:'Annual revenue range', websiteLabel:'Website (optional)',
+    errBizName:'Please enter your business name.', errIndustry:'Please select your industry.', errTeam:'Please select your team size.',
+    s3label:'Challenges', s3h2:'Where does your business feel the friction?', s3sub:'Select every area that slows you down. There are no wrong answers.',
+    painLabel:'Top challenges (select all that apply)',
+    painDetailLabel:"In your own words — what's the #1 thing costing you the most time or money right now?",
+    painDetailPh:'e.g. We spend 3+ hours a day manually calling leads that never pick up…',
+    errPain:'Please select at least one challenge.',
+    s4label:'Fit & intent', s4h2:"Let's understand your priorities", s4sub:'A few quick questions so we come prepared with the right conversation.',
+    investLabel:'How open are you to investing in automation tools if they solve your top problem?',
+    urgencyLabel:'On a scale of 1–10, how urgent is solving your #1 challenge?',
+    scaleMin:'Not urgent', scaleMax:'On fire',
+    toolsLabel:'Are you currently using any automation or CRM tools?',
+    extraLabel:"Anything else you'd like us to know before we connect?", extraPh:'Goals, concerns, previous experiences with agencies…',
+    s5label:'Almost done', s5h2:'Confirm and submit', s5sub:"We'll review your answers and reach out within 1–2 business days. You'll also receive a copy of your pain point summary by email.",
+    consent1:'I agree to be contacted by Isaac Automation Group about my business challenges and how automation may help. My information will never be sold or shared.',
+    consent2:'Add me to the IAG email list for free automation tips, case studies, and small business growth resources. (Unsubscribe anytime.)',
+    errConsent:'Please check the box above to continue.',
+    btnSubmit:'Submit my assessment',
+    tyH2:"You're all set.", tySub:"Thank you for taking the time to share. We've received your business assessment and will be in touch within 1–2 business days.",
+    tySnapshotLabel:'Your business snapshot', tyNextLabel:'What happens next:',
+    tyNextBody:"Our team will review your answers and reach out to schedule a short call — no pitch, no pressure. Just a conversation about what's actually slowing your business down.",
+    tyBack:'← Back to isaacautomation.com', footerContact:'Contact us',
+    refOpts: ['Select an option','Referred by a friend or contact','Isaac Automation Group website','Social media','Other'],
+    indOpts: ['Select…','Home Services (HVAC, Roofing, Plumbing)','Healthcare / Chiropractic / Dental','Real Estate','Legal / Law Firm','Retail / E-commerce','Restaurant / Food & Beverage','Transportation / Logistics','Manufacturing / Industrial','Fitness / Wellness','Marketing / Agency','Financial Services','Education / Training','Other'],
+    teamOpts: ['Select…','Just me','2–5 people','6–15 people','16–50 people','50+ people'],
+    revOpts: ['Prefer not to say','Under $100K','$100K – $500K','$500K – $1M','$1M – $5M','$5M+'],
+    toolsOpts: ['Select…','No — everything is manual','Basic tools (spreadsheets, email only)','Some CRM (HubSpot, Salesforce, etc.)','GoHighLevel','We have a system but it\'s not working well','Yes — fully automated and happy'],
+    painItems: ['Lead gen & follow-up','Missed calls & lost leads','Appointment scheduling','Customer communication','Quoting & estimates','CRM & data entry','Online reviews & reputation','Staff bandwidth & repetitive tasks','Reporting & analytics','Marketing & ad spend','Cash flow & invoicing','Hiring & retaining staff'],
+    investItems: [
+      {label:'Just exploring for now', sub:'No budget committed yet'},
+      {label:'Open if the ROI is clear', sub:'Would move within 1–3 months'},
+      {label:'Actively looking right now', sub:'Ready to implement within 30 days'},
+      {label:'Already budgeted for this', sub:'Budget is approved and ready'},
+    ],
+  },
+  es: {
+    stepFn: n => n === 'done' ? 'Completo' : 'Paso ' + n + ' de 5',
+    s1label:'Empecemos', s1h2:'Cuéntanos sobre ti', s1sub:'Esto tarda unos 3 minutos. Tus respuestas nos ayudan a entender cómo podemos apoyar tu negocio.',
+    firstName:'Nombre', lastName:'Apellido', emailLabel:'Correo electrónico', phoneLabel:'Número de teléfono',
+    referredBy:'¿Cómo te enteraste de esta encuesta?',
+    errFirst:'Por favor ingresa tu nombre.', errLast:'Por favor ingresa tu apellido.',
+    errEmail:'Por favor ingresa un correo electrónico válido.', errPhone:'Por favor ingresa tu número de teléfono.',
+    btnContinue:'Continuar →', btnBack:'← Atrás',
+    s2label:'Tu negocio', s2h2:'Sobre tu empresa', s2sub:'Trabajamos con todo tipo de negocios. Mientras más detalle compartas, mejor podemos adaptar nuestra conversación.',
+    bizName:'Nombre del negocio', bizNamePh:'Techado Acme S.A.',
+    industryLabel:'Industria / Tipo', teamLabel:'Tamaño del equipo', revenueLabel:'Rango de ingresos anuales', websiteLabel:'Sitio web (opcional)',
+    errBizName:'Por favor ingresa el nombre de tu negocio.', errIndustry:'Por favor selecciona tu industria.', errTeam:'Por favor selecciona el tamaño de tu equipo.',
+    s3label:'Desafíos', s3h2:'¿Dónde siente fricción tu negocio?', s3sub:'Selecciona todas las áreas que te ralentizan. No hay respuestas incorrectas.',
+    painLabel:'Principales desafíos (selecciona todos los que apliquen)',
+    painDetailLabel:'En tus propias palabras — ¿cuál es el problema #1 que más te cuesta tiempo o dinero ahora mismo?',
+    painDetailPh:'Ej. Pasamos más de 3 horas al día llamando manualmente a leads que nunca contestan…',
+    errPain:'Por favor selecciona al menos un desafío.',
+    s4label:'Compatibilidad e intención', s4h2:'Entendamos tus prioridades', s4sub:'Algunas preguntas rápidas para llegar preparados a la conversación correcta.',
+    investLabel:'¿Qué tan abierto estás a invertir en herramientas de automatización si resuelven tu problema principal?',
+    urgencyLabel:'En una escala del 1 al 10, ¿qué tan urgente es resolver tu desafío #1?',
+    scaleMin:'No urgente', scaleMax:'Urgentísimo',
+    toolsLabel:'¿Estás usando actualmente alguna herramienta de automatización o CRM?',
+    extraLabel:'¿Hay algo más que quieras que sepamos antes de conectarnos?', extraPh:'Objetivos, preocupaciones, experiencias previas con agencias…',
+    s5label:'Casi terminamos', s5h2:'Confirmar y enviar', s5sub:'Revisaremos tus respuestas y nos comunicaremos contigo en 1–2 días hábiles. También recibirás un resumen de tus puntos de dolor por correo.',
+    consent1:'Acepto ser contactado por Isaac Automation Group sobre los desafíos de mi negocio y cómo la automatización puede ayudar. Mi información nunca será vendida ni compartida.',
+    consent2:'Agrégame a la lista de correo de IAG para recibir consejos de automatización, casos de estudio y recursos de crecimiento. (Puedes darte de baja en cualquier momento.)',
+    errConsent:'Por favor marca la casilla para continuar.',
+    btnSubmit:'Enviar mi evaluación',
+    tyH2:'¡Todo listo.', tySub:'Gracias por tomarte el tiempo de compartir. Hemos recibido tu evaluación y nos pondremos en contacto en 1–2 días hábiles.',
+    tySnapshotLabel:'Tu resumen empresarial', tyNextLabel:'¿Qué sigue?',
+    tyNextBody:'Nuestro equipo revisará tus respuestas y se comunicará para agendar una llamada breve — sin discurso de ventas, sin presión.',
+    tyBack:'← Volver a isaacautomation.com', footerContact:'Contáctanos',
+    refOpts: ['Selecciona una opción','Referido por un amigo o contacto','Sitio web de Isaac Automation Group','Redes sociales','Otro'],
+    indOpts: ['Seleccionar…','Servicios del hogar (HVAC, Techado, Plomería)','Salud / Quiropráctica / Dental','Bienes Raíces','Legal / Bufete de abogados','Retail / Comercio electrónico','Restaurante / Alimentos y bebidas','Transporte / Logística','Manufactura / Industrial','Fitness / Bienestar','Marketing / Agencia','Servicios financieros','Educación / Capacitación','Otro'],
+    teamOpts: ['Seleccionar…','Solo yo','2–5 personas','6–15 personas','16–50 personas','Más de 50 personas'],
+    revOpts: ['Prefiero no decir','Menos de $100K','$100K – $500K','$500K – $1M','$1M – $5M','$5M+'],
+    toolsOpts: ['Seleccionar…','No — todo es manual','Herramientas básicas (hojas de cálculo, solo email)','Algún CRM (HubSpot, Salesforce, etc.)','GoHighLevel','Tenemos un sistema pero no funciona bien','Sí — completamente automatizado y satisfecho'],
+    painItems: ['Generación de leads y seguimiento','Llamadas perdidas y leads perdidos','Programación de citas','Comunicación con clientes','Cotizaciones y presupuestos','CRM y captura de datos','Reseñas en línea y reputación','Tareas repetitivas del personal','Reportes y análisis','Marketing y publicidad','Flujo de caja y facturación','Contratación y retención de personal'],
+    investItems: [
+      {label:'Solo explorando por ahora', sub:'Sin presupuesto comprometido aún'},
+      {label:'Abierto si el ROI es claro', sub:'Me movería en 1–3 meses'},
+      {label:'Buscando activamente ahora', sub:'Listo para implementar en 30 días'},
+      {label:'Ya tengo presupuesto para esto', sub:'El presupuesto está aprobado y listo'},
+    ],
+  },
+  ht: {
+    stepFn: n => n === 'done' ? 'Konplè' : 'Etap ' + n + ' nan 5',
+    s1label:'Kòmanse', s1h2:'Pale nou de ou', s1sub:'Sa pran anviwon 3 minit. Repons ou yo ede nou konprann kijan nou ka sipòte biznis ou.',
+    firstName:'Prenon', lastName:'Siyati', emailLabel:'Adrès imèl', phoneLabel:'Nimewo telefòn',
+    referredBy:'Ki jan ou aprann de sondaj sa a?',
+    errFirst:'Tanpri antre prenon ou.', errLast:'Tanpri antre siyati ou.',
+    errEmail:'Tanpri antre yon adrès imèl valid.', errPhone:'Tanpri antre nimewo telefòn ou.',
+    btnContinue:'Kontinye →', btnBack:'← Retounen',
+    s2label:'Biznis ou', s2h2:'De konpayi ou', s2sub:'Nou travay ak tout kalite biznis. Plis detay ou pataje, pi bon nou ka adapte konvèsasyon an.',
+    bizName:'Non biznis', bizNamePh:'Toitiray Acme SA',
+    industryLabel:'Endistri / Tip', teamLabel:'Gwosè ekip la', revenueLabel:'Ranje revni anyèl', websiteLabel:'Sit entènèt (opsyonèl)',
+    errBizName:'Tanpri antre non biznis ou.', errIndustry:'Tanpri chwazi endistri ou.', errTeam:'Tanpri chwazi gwosè ekip ou.',
+    s3label:'Defi', s3h2:'Ki kote biznis ou santi frikasyon?', s3sub:'Chwazi tout domèn ki ralanti ou. Pa gen move repons.',
+    painLabel:'Pi gwo defi yo (chwazi tout ki aplike)',
+    painDetailLabel:'Nan pwòp mo pa ou — ki bagay #1 ki koute ou plis tan oswa lajan kounye a?',
+    painDetailPh:'Pa egzanp: Nou pase plis pase 3 èdtan pa jou ap rele lead manyèlman…',
+    errPain:'Tanpri chwazi omwen yon defi.',
+    s4label:'Konpatibilite ak entansyon', s4h2:'Ann konprann priyorite ou yo', s4sub:'Kèk kesyon rapid pou nou vini prepare ak bon konvèsasyon an.',
+    investLabel:'Ki jan ou ouvè pou envesti nan zouti otomatizasyon si yo rezoud pwoblèm prensipal ou?',
+    urgencyLabel:'Sou yon echèl 1–10, ki jan sa ijan pou rezoud defi #1 ou?',
+    scaleMin:'Pa ijan', scaleMax:'Trè ijan',
+    toolsLabel:'Èske ou itilize kounye a nenpòt zouti otomatizasyon oswa CRM?',
+    extraLabel:'Gen lòt bagay ou ta renmen nou konnen anvan nou konekte?', extraPh:'Objektif, enkyetid, eksperyans ansyen ak ajans…',
+    s5label:'Prèske fini', s5h2:'Konfime epi soumèt', s5sub:'Nou pral revize repons ou yo epi kontakte ou nan 1–2 jou ouvrab. Ou pral resevwa yon kopi rezime pa imèl.',
+    consent1:'Mwen dakò pou Isaac Automation Group kontakte mwen konsènan defi biznis mwen ak kijan otomatizasyon ka ede. Enfòmasyon mwen yo pap janm vann oswa pataje.',
+    consent2:'Ajoute mwen nan lis imèl IAG pou jwenn konsèy otomatizasyon gratis, etid de ka, ak resous kwasans biznis. (Ou ka dezabòne nenpòt ki lè.)',
+    errConsent:'Tanpri koche bwat la pou kontinye.',
+    btnSubmit:'Soumèt evalyasyon mwen',
+    tyH2:'Ou fin fè li.', tySub:'Mèsi paske ou te pran tan pou pataje. Nou resevwa evalyasyon biznis ou a epi n ap kontakte ou nan 1–2 jou ouvrab.',
+    tySnapshotLabel:'Rezime biznis ou', tyNextLabel:'Kisa k ap pase apre?',
+    tyNextBody:'Ekip nou an ap revize repons ou yo epi kontakte ou pou planifye yon ti apèl — san vant, san presyon.',
+    tyBack:'← Retounen nan isaacautomation.com', footerContact:'Kontakte nou',
+    refOpts: ['Chwazi yon opsyon','Refere pa yon zanmi oswa kontak','Sit entènèt Isaac Automation Group','Rezo sosyal','Lòt'],
+    indOpts: ['Chwazi…','Sèvis Kay (HVAC, Toitiray, Plonbri)','Sante / Kiropraktik / Dantèl','Imobilye','Legal / Kabinè Avoka','Vann detay / Ekomès','Restoran / Manje ak Bwason','Transpò / Lojistik','Fabrikasyon / Endistriyèl','Kondisyon fizik / Byennèt','Maketing / Ajans','Sèvis finansye','Edikasyon / Fòmasyon','Lòt'],
+    teamOpts: ['Chwazi…','Sèlman mwen','2–5 moun','6–15 moun','16–50 moun','Plis pase 50 moun'],
+    revOpts: ['Prefere pa di','Mwens pase $100K','$100K – $500K','$500K – $1M','$1M – $5M','$5M+'],
+    toolsOpts: ['Chwazi…','Non — tout bagay manyèl','Zouti debaz (fèy kalkil, imèl sèlman)','Kèk CRM (HubSpot, Salesforce, elatriye)','GoHighLevel','Nou gen yon sistèm men li pa travay byen','Wi — konplètman otomatize epi satisfè'],
+    painItems: ['Jenerasyon lead ak swivi','Apèl manke ak lead pèdu','Planifikasyon randevou','Kominikasyon ak kliyan','Devis ak estimasyon','CRM ak antre done','Avis sou entènèt ak reputasyon','Kapasite anplwaye ak travay repetitif','Rapò ak analiz','Maketing ak depans piblisite','Flò kach ak faktirasyon','Anbauchman ak retansyon anplwaye'],
+    investItems: [
+      {label:'Jis ap eksplore pou kounye a', sub:'Pa gen bidjè angaje yet'},
+      {label:'Ouvè si ROI a klè', sub:'Ta deplase nan 1–3 mwa'},
+      {label:'Ap chèche aktivman kounye a', sub:'Prè pou aplike nan 30 jou'},
+      {label:'Deja gen bidjè pou sa', sub:'Bidjè a apwouve epi prè'},
+    ],
+  }
+};
+
+let lang = 'en';
+let currentStep = 1;
+
+function tr(key) { return (T[lang] && T[lang][key] !== undefined) ? T[lang][key] : (T.en[key] || ''); }
+
+function buildSelects() {
+  document.querySelectorAll('select[data-opts]').forEach(sel => {
+    const key = sel.getAttribute('data-opts');
+    const opts = tr(key);
+    if (!Array.isArray(opts)) return;
+    const saved = sel.value;
+    sel.innerHTML = '';
+    opts.forEach((txt, i) => {
+      const o = document.createElement('option');
+      o.textContent = txt;
+      if (i === 0 && sel.id !== 'revenue') o.value = '';
+      sel.appendChild(o);
+    });
+    sel.value = saved;
+  });
+}
+
+function buildPainGrid() {
+  const grid = document.getElementById('pain-grid');
+  const items = tr('painItems');
+  const checked = Array.from(grid.querySelectorAll('input:checked')).map((_,i) => i);
+  grid.innerHTML = '';
+  items.forEach((txt, i) => {
+    const lbl = document.createElement('label');
+    lbl.className = 'check-item' + (checked.includes(i) ? ' selected' : '');
+    lbl.setAttribute('onclick', 'toggleCheck(this)');
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = checked.includes(i);
+    const sp = document.createElement('span');
+    sp.textContent = txt;
+    lbl.appendChild(cb); lbl.appendChild(sp);
+    grid.appendChild(lbl);
+  });
+}
+
+function buildInvestGroup() {
+  const group = document.getElementById('invest-group');
+  const items = tr('investItems');
+  const selectedIdx = Array.from(group.querySelectorAll('.radio-item')).findIndex(r => r.classList.contains('selected'));
+  group.innerHTML = '';
+  items.forEach((item, i) => {
+    const lbl = document.createElement('label');
+    lbl.className = 'radio-item' + (i === selectedIdx ? ' selected' : '');
+    lbl.setAttribute('onclick', "selectRadio(this,'invest-group')");
+    const rb = document.createElement('input');
+    rb.type = 'radio'; rb.name = 'invest';
+    rb.checked = i === selectedIdx;
+    const wrap = document.createElement('div');
+    const rLabel = document.createElement('div'); rLabel.className = 'radio-label'; rLabel.textContent = item.label;
+    const rSub = document.createElement('div'); rSub.className = 'radio-sub'; rSub.textContent = item.sub;
+    wrap.appendChild(rLabel); wrap.appendChild(rSub);
+    lbl.appendChild(rb); lbl.appendChild(wrap);
+    group.appendChild(lbl);
+  });
+}
+
+function applyTranslations() {
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    const val = tr(key);
+    if (typeof val === 'string') el.textContent = val;
+  });
+  document.querySelectorAll('[data-ph]').forEach(el => {
+    el.placeholder = tr(el.getAttribute('data-ph'));
+  });
+  buildSelects();
+  buildPainGrid();
+  buildInvestGroup();
+}
+
+function updateProgress(step) {
+  const label = step > 5 ? 'done' : step;
+  document.getElementById('step-counter').textContent = T[lang].stepFn(label);
+  document.getElementById('progress-fill').style.width = (Math.min(step, 5) / 5 * 100) + '%';
+}
+
+function setLang(l) {
+  lang = l;
+  document.documentElement.lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim().toLowerCase() === l));
+  applyTranslations();
+  updateProgress(currentStep);
+}
+
+function showStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('step-' + n);
+  if (el) el.classList.add('active');
+  currentStep = n;
+  updateProgress(n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleCheck(label) {
+  const cb = label.querySelector('input[type="checkbox"]');
+  cb.checked = !cb.checked;
+  label.classList.toggle('selected', cb.checked);
+  document.getElementById('pain-error').style.display = 'none';
+}
+
+function selectRadio(label, groupId) {
+  document.querySelectorAll('#' + groupId + ' .radio-item').forEach(r => r.classList.remove('selected'));
+  label.classList.add('selected');
+  label.querySelector('input[type="radio"]').checked = true;
+}
+
+function selectScale(btn, groupId) {
+  document.querySelectorAll('#' + groupId + ' .scale-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function validateStep(step) {
+  let valid = true;
+  if (step === 1) {
+    [{id:'first-name',fid:'f-first',check:v=>v.trim().length>0},
+     {id:'last-name',fid:'f-last',check:v=>v.trim().length>0},
+     {id:'email',fid:'f-email',check:v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)},
+     {id:'phone',fid:'f-phone',check:v=>v.trim().length>=7}
+    ].forEach(f => {
+      const field = document.getElementById(f.fid);
+      if (!f.check(document.getElementById(f.id).value)) { field.classList.add('has-error'); valid = false; }
+      else field.classList.remove('has-error');
+    });
+  }
+  if (step === 2) {
+    [{id:'biz-name',fid:'f-biz-name',check:v=>v.trim().length>0},
+     {id:'industry',fid:'f-industry',check:v=>v!==''},
+     {id:'team-size',fid:'f-team-size',check:v=>v!==''}
+    ].forEach(f => {
+      const field = document.getElementById(f.fid);
+      if (!f.check(document.getElementById(f.id).value)) { field.classList.add('has-error'); valid = false; }
+      else field.classList.remove('has-error');
+    });
+  }
+  if (step === 3) {
+    if (!document.querySelector('#pain-grid input:checked')) {
+      document.getElementById('pain-error').style.display = 'block'; valid = false;
+    }
+  }
+  return valid;
+}
+
+function nextStep(n) { if (validateStep(n)) showStep(n + 1); }
+function prevStep(n) { showStep(n - 1); }
+
+function collectFormData() {
+  const checks = Array.from(document.querySelectorAll('#pain-grid input:checked')).map(c => c.nextElementSibling.textContent);
+  const urgencyBtn = document.querySelector('#urgency-scale .scale-btn.selected');
+  const investRadio = document.querySelector('[name="invest"]:checked');
+  const investLabel = investRadio ? investRadio.closest('.radio-item').querySelector('.radio-label').textContent : '';
+  return {
+    firstName: document.getElementById('first-name').value.trim(),
+    lastName: document.getElementById('last-name').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    phone: document.getElementById('phone').value.trim(),
+    referredBy: document.getElementById('referred-by').value,
+    bizName: document.getElementById('biz-name').value.trim(),
+    industry: document.getElementById('industry').value,
+    teamSize: document.getElementById('team-size').value,
+    revenue: document.getElementById('revenue').value,
+    website: document.getElementById('website').value.trim(),
+    painPoints: checks,
+    painDetail: document.getElementById('pain-detail').value.trim(),
+    investment: investLabel,
+    urgency: urgencyBtn ? urgencyBtn.dataset.val : '',
+    currentTools: document.getElementById('current-tools').value,
+    extraNotes: document.getElementById('extra-notes').value.trim(),
+    emailList: document.getElementById('email-list-check').checked,
+    language: lang,
+    submittedAt: new Date().toISOString(),
+  };
+}
+
+function submitForm() {
+  const consentEl = document.getElementById('consent-error');
+  if (!document.getElementById('consent-check').checked) { consentEl.style.display = 'block'; return; }
+  consentEl.style.display = 'none';
+  const data = collectFormData();
+  const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyiV3E23H03jwe41BkijkPhRfTTlJHZQtC8Rs6rjIxqsP7KekU5qZIYctXrGdyb7LzL/exec';
+  fetch(WEBHOOK_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) }).catch(()=>{});
+  showThankYou(data);
+}
+
+function showThankYou(data) {
+  document.getElementById('survey-wrap').style.display = 'none';
+  const ty = document.getElementById('thank-you');
+  ty.style.display = 'block';
+  applyTranslations();
+  const tagContainer = document.getElementById('pain-tags');
+  tagContainer.innerHTML = '';
+  data.painPoints.forEach(p => {
+    const tag = document.createElement('span');
+    tag.className = 'pain-tag'; tag.textContent = p; tagContainer.appendChild(tag);
+  });
+  const noteBlock = document.getElementById('pain-note-block');
+  if (data.painDetail) { noteBlock.textContent = '"' + data.painDetail + '"'; }
+  else { noteBlock.style.display = 'none'; }
+  if (!data.painPoints.length) document.getElementById('pain-summary-block').style.display = 'none';
+  document.getElementById('step-counter').textContent = T[lang].stepFn('done');
+  document.getElementById('progress-fill').style.width = '100%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(() => { window.location.href = 'https://isaacautomation.com'; }, 12000);
+}
+
+document.addEventListener('input', e => {
+  const field = e.target.closest('.field');
+  if (field) field.classList.remove('has-error');
+});
+
+applyTranslations();
+updateProgress(1);
+</script>
+</body>
+</html>
